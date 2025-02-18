@@ -11,11 +11,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AppConfig {
 
     @Bean
-    public void createDefaultAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        if (userRepository.findByUsername("admin").isEmpty()) { // Check if admin already exists
-            User admin = new User(null, "Mohamed", "Ali","admin", passwordEncoder.encode("admin123"), User.Role.ADMIN);
-            userRepository.save(admin);
-            System.out.println("✅ Default admin user created: admin / admin123");
-        }
+    public User createDefaultAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        return userRepository.findByUsername("admin")
+                .orElseGet(() -> {
+                    User admin = new User(null, "Mohamed", "Ali","admin", passwordEncoder.encode("admin123"), User.Role.ADMIN);
+                    User savedAdmin = userRepository.save(admin);
+                    System.out.println("✅ Default admin user created: admin / admin123");
+                    return savedAdmin;
+                });
     }
 }
