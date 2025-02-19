@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 
+import com.example.demo.dto.MovieRequest;
 import com.example.demo.entity.Movie;
 import com.example.demo.repository.MovieRepository;
 
@@ -47,7 +48,7 @@ public class MovieService {
     public List<Movie> searchMovies(String title, String year, String genre) {
         if (title != null && !title.isEmpty()) {
             return movieRepository.searchByTitle(title);
-        } else if (year != null) {
+        } else if (year != null && !year.isEmpty()) {
             return movieRepository.findByYear(year);
         } else if (genre != null && !genre.isEmpty()) {
             return movieRepository.findByGenreContainingIgnoreCase(genre);
@@ -56,7 +57,15 @@ public class MovieService {
     }
 
     @Transactional
-    public Movie addMovie(Movie movie) {
+    public Movie addMovie(MovieRequest movieRequest) {
+        Movie movie = new Movie();
+        movie.setTitle(movieRequest.getTitle());
+        movie.setDirector(movieRequest.getDirector());
+        movie.setPlot(movieRequest.getPlot());
+        movie.setGenre(movieRequest.getGenre());
+        movie.setYear(movieRequest.getYear());
+        movie.setImdbId(movieRequest.getImdbId());
+        movie.setPosterUrl(movieRequest.getPosterUrl());
         return movieRepository.save(movie);
     }
 
