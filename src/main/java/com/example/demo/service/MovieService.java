@@ -44,7 +44,7 @@ public class MovieService {
     }
 
 
-    public List<Movie> searchMovies(String title, Integer year, String genre) {
+    public List<Movie> searchMovies(String title, String year, String genre) {
         if (title != null && !title.isEmpty()) {
             return movieRepository.searchByTitle(title);
         } else if (year != null) {
