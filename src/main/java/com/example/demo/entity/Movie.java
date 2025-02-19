@@ -24,5 +24,6 @@ public class Movie {
     private String director;
     private String plot;
     private String posterUrl;
+    @Column(nullable = false, unique = true)
     private String imdbId;
 }
