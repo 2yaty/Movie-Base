@@ -39,16 +39,22 @@ public class MovieController {
         return ResponseEntity.ok(movieService.searchMovies(title,year, genre));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Movie> addMovie(@RequestBody MovieRequest request) {
         return ResponseEntity.ok(movieService.addMovie(request));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> removeMovie(@PathVariable Long id) {
         movieService.deleteMovie(id);
         return ResponseEntity.ok("Movie removed successfully");
     }
+
+//    @GetMapping("/debug")
+//    public ResponseEntity<?> debugAuthentication() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        return ResponseEntity.ok(authentication.toString());
+//    }
 }
