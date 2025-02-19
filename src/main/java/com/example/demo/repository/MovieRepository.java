@@ -13,7 +13,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
     @Query("SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(CONCAT('%', :title, '%'))")
     List<Movie> searchByTitle(String title);
 
-    List<Movie> findByYear(int year);
+    List<Movie> findByYear(String year);
 
     List<Movie> findByGenreContainingIgnoreCase(String genre);
 }
