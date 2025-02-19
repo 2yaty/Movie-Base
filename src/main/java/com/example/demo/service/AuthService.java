@@ -17,18 +17,16 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final TokenService jwtUtil;
 
     public AuthService(
             AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService, PasswordEncoder passwordEncoder,
-            UserRepository userRepository,
+            UserRepository userRepository, UserService userService,
             TokenService jwtUtil) {
         this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -40,7 +38,7 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
+        if (userService.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already taken");
         }
 
@@ -48,9 +46,9 @@ public class AuthService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(request.getPassword());
         user.setRole(User.Role.USER);
-        userRepository.save(user);
+        userService.registerUser(user);
 
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
