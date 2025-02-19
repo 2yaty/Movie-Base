@@ -24,4 +24,5 @@ public class Movie {
     private String director;
     private String plot;
     private String posterUrl;
+    private String imdbId;
 }
