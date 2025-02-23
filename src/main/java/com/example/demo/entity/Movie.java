@@ -23,7 +23,17 @@ public class Movie {
     private String genre;
     private String director;
     private String plot;
-    private String posterUrl;
+    private String poster;
     @Column(nullable = false, unique = true)
     private String imdbId;
+
+    public Movie(String title, String director, String year, String genre, String plot, String imdbId, String poster) {
+        this.title = title;
+        this.director = director;
+        this.year = year;
+        this.genre = genre;
+        this.plot = plot;
+        this.imdbId = imdbId;
+        this.poster = poster;
+    }
 }
