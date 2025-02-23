@@ -31,8 +31,8 @@ public class OmdbController {
     }
 
     @GetMapping("/details")
-    public ResponseEntity<Map<String, Object>> getMovieDetails(@RequestParam String imdbId) {
-        Map<String, Object> movieDetails = omdbService.getMovieDetails(imdbId);
+    public ResponseEntity<Map<String, Object>> getMovieDetails(@RequestParam long id) {
+        Map<String, Object> movieDetails = omdbService.getMovieDetails(id);
         return ResponseEntity.ok(movieDetails);
     }
 
