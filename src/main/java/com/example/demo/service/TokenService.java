@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+
 import java.time.Instant;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class TokenService {
 
 
     private final JwtEncoder jwtEncoder;
-
+    private final UserService userService;
 
     private final JwtDecoder jwtDecoder;
 
@@ -36,6 +37,7 @@ public class TokenService {
                 .issuer("self")
                 .issuedAt(now) //TODO: add the token expiration date here
                 .subject(auth.getName())
+                .claim("firstName", userService.findByUsername(auth.getName()).getFirstName())
                 .claim("roles", scope)
                 .build();
 
