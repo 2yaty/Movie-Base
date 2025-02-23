@@ -52,6 +52,17 @@ public class MovieController {
         return ResponseEntity.ok("Movie removed successfully");
     }
 
+    @PostMapping("/batch-add")
+    public ResponseEntity<List<Movie>> batchAddMovies(@RequestBody List<MovieRequest> movieRequests) {
+        return ResponseEntity.ok(movieService.batchAddMovies(movieRequests));
+    }
+
+    @DeleteMapping("/batch-delete")
+    public ResponseEntity<Void> batchDeleteMovies(@RequestBody List<Long> movieIds) {
+        movieService.batchDeleteMovies(movieIds);
+        return ResponseEntity.noContent().build();
+    }
+
 //    @GetMapping("/debug")
 //    public ResponseEntity<?> debugAuthentication() {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
