@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -65,12 +66,25 @@ public class MovieService {
         movie.setGenre(movieRequest.getGenre());
         movie.setYear(movieRequest.getYear());
         movie.setImdbId(movieRequest.getImdbId());
-        movie.setPosterUrl(movieRequest.getPosterUrl());
+        movie.setPoster(movieRequest.getPoster());
         return movieRepository.save(movie);
     }
 
     @Transactional
     public void deleteMovie(Long id) {
         movieRepository.deleteById(id);
+    }
+
+
+    public List<Movie> batchAddMovies(List<MovieRequest> movieRequests) {
+        List<Movie> movies = movieRequests.stream()
+                .map(request -> new Movie(request.getTitle(), request.getDirector(), request.getYear(), request.getGenre(), request.getPlot(), request.getImdbId(), request.getPoster()))
+                .collect(Collectors.toList());
+
+        return movieRepository.saveAll(movies);
+    }
+
+    public void batchDeleteMovies(List<Long> movieIds) {
+        movieRepository.deleteAllById(movieIds);
     }
 }
