@@ -28,14 +28,19 @@ public class RatingController {
     }
 
     @GetMapping("/{movieId}")
-    public ResponseEntity<List<Rating>> getMovieRatings(@PathVariable Long movieId) {
-        return ResponseEntity.ok(ratingService.getMovieRatings(movieId));
+    public ResponseEntity<Integer> getMovieRating(@PathVariable Long movieId, Authentication authentication) {
+        return ResponseEntity.ok(ratingService.getMovieRating(movieId, authentication.getName()).getRating());
     }
 
-    @DeleteMapping("/{ratingId}")
-    public ResponseEntity<String> deleteRating(@PathVariable Long ratingId, Authentication authentication) {
+    @PutMapping()
+    public void updateRating( @RequestBody RatingRequest request, Authentication authentication) {
         String username = authentication.getName();
-        ratingService.deleteRating(ratingId, username);
-        return ResponseEntity.ok("Rating deleted successfully");
+        ratingService.updateRating(request, username);
+    }
+
+    @DeleteMapping("/{movieId}")
+    public void deleteRating(@PathVariable Long movieId, Authentication authentication) {
+        String username = authentication.getName();
+        ratingService.deleteRating(movieId, username);
     }
 }

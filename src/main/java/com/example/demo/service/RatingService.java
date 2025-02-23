@@ -42,13 +42,21 @@ public class RatingService {
                 });
     }
 
+    public Rating getMovieRating(Long movieId, String username) {
+        Movie movie = movieService.getMovieById(movieId).orElseThrow();
+        User user = userService.findByUsername(username);
+
+        return ratingRepository.findByUserAndMovie(user, movie)
+                .orElseThrow(() -> new RuntimeException("Rating not found"));
+    }
+
     public List<Rating> getMovieRatings(Long movieId) {
         Optional<Movie> movie = movieService.getMovieById(movieId);
         return ratingRepository.findByMovie(movie.orElse(null));
     }
 
-    public void deleteRating(Long ratingId, String username) {
-        Rating rating = ratingRepository.findById(ratingId)
+    public void deleteRating(Long movieId, String username) {
+        Rating rating = ratingRepository.findByUserAndMovie(userService.findByUsername(username), movieService.getMovieById(movieId).orElseThrow())
                 .orElseThrow(() -> new RuntimeException("Rating not found"));
 
         if (!rating.getUser().getUsername().equals(username)) {
@@ -56,5 +64,17 @@ public class RatingService {
         }
 
         ratingRepository.delete(rating);
+    }
+
+    public void updateRating(RatingRequest request, String username) {
+        User user = userService.findByUsername(username);
+        Movie movie = movieService.getMovieById(request.getMovieId()).orElseThrow();
+
+        ratingRepository.findByUserAndMovie(userService.findByUsername(username), movieService.getMovieById(request.getMovieId()).orElseThrow())
+                .map(existingRating -> {
+                    existingRating.setRating(request.getRating());
+                    return ratingRepository.save(existingRating);
+                })
+                .orElseThrow(() -> new RuntimeException("Rating not found"));
     }
 }
