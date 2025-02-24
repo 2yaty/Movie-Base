@@ -73,7 +73,7 @@ public class SecurityConfiguration {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration corsConfiguration=new CorsConfiguration();
                 corsConfiguration.setAllowCredentials(true);// allows taking authentication with credentials
-                corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+                corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200","https://movie-base-frontend.vercel.app"));
                 // providing the allowed origin details, can provide multiple origins here, 7070 is the port number of client application here
                 corsConfiguration.setAllowedMethods(Collections.singletonList("*"));// allowing all HTTP methods GET,POST,PUT etc, can configure on your need
                 corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));// allowing all the request headers, can configure according to your need, which headers to allow
