@@ -34,7 +34,7 @@ public class MovieService {
         return movieRepository.findAll(PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
-                pageable.getSortOr(Sort.by(Sort.Direction.DESC, "title"))));
+                pageable.getSortOr(Sort.by(Sort.Direction.ASC, "title"))));
     }
 
     public Optional<Movie> getMovieById(Long id) {
