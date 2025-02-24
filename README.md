@@ -1,139 +1,69 @@
-
-# MovieBase Application
+# Backend - MovieBase System
 
 ## Overview
-MovieHub is a web application that allows admins to search for movies using the OMDb API, add them to a local database, and manage the movie list. Regular users can browse, search, and rate movies stored in the database.
+This is the backend for the MovieBase System built with **Spring Boot** and **PostgreSQL**. It provides authentication, movie management, and user ratings. The system interacts with the **OMDb API** to fetch movie details.
 
 ## Features
-### **Admin Features**
-- Login functionality.
-- Search for movies via the OMDb API.
-- Add or remove movies from the local database.
-- Batch add/remove movies.
+- **Authentication** using JWT (Admin & User roles)
+- **Movie Management** (Admin can add, delete, batch add/delete movies)
+- **User Ratings** (Users can rate movies)
+- **OMDb API Integration** (Fetch movie details from OMDb API)
+- **Global Exception Handling**
 
-### **Regular User Features**
-- Login functionality.
-- View a list of movies added by the admin.
-- Search for specific movies in the database.
-- View detailed movie information.
-- Rate movies.
+## Tech Stack
+- **Java 17**
+- **Spring Boot**
+- **Spring Security & JWT**
+- **PostgreSQL**
+- **Hibernate & JPA**
 
-### **Additional Features**
-- Pagination for efficient browsing.
-- Global exception handling.
-- JWT-based authentication & authorization.
+## Setup Instructions
+### Prerequisites
+- Install **Java 17**
+- Install **PostgreSQL**
+- Set up environment variables:
+  ```bash
+  export DATABASE_URL=YOUR_DATABASE_URL_INCLUDING_USERNAME_AND_PASSWORD
+  export omdb.api.key=YOUR_OMDB_API_KEY
+  ```
 
----
+### Running the Application
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/2yaty/Movie-Base.git
+   cd Movie-Base
+   ```
+2. Install dependencies:
+   ```bash
+   mvn clean install
+   ```
+3. Run the application:
+   ```bash
+   mvn spring-boot:run
+   ```
 
-## Technologies Used
-### **Frontend:**
-- Angular 16+
+### API Endpoints
+#### Authentication
+- `POST /api/auth/login` → Authenticate user and return JWT token
 
-### **Backend:**
-- Spring Boot (Java 8+)
-- PostgreSQL
-- JWT Authentication
-- OMDb API Integration
+#### Movie Management (Admin Only)
+- `POST /api/movies/batch-add` → Add multiple movies
+- `DELETE /api/movies/batch-delete` → Remove multiple movies
 
----
+#### Movie Viewing (User/Admin)
+- `GET /api/movies` → Get all movies
+- `GET /api/movies/{id}` → Get movie details
 
-## Installation & Setup
-### **1. Clone the Repository**
-```sh
-git clone https://github.com/2yaty/Movie-Base.git
-cd Movie-Base
-```
+#### Ratings (User Only)
+- `POST /api/ratings` → Rate a movie
 
-### **2. Backend Setup**
-#### **Environment Variables**
-Add the following:
-```properties
-DATABASE_URL=YOUR_DATABASE_URL_WITH_USERNAME_AND_PASSWORD_INCLUDED
+#### OMDb Integration
+- `GET /api/omdb/search?title=movie_name` → Search for a movie in OMDb
 
-omdb.api.key=YOUR_OMDB_API_KEY
-```
-#### **Build & Run Backend**
-```sh
-mvn clean install
-mvn spring-boot:run
-```
-
-### **3. Frontend Setup**
-```sh
-cd frontend
-npm install
-ng serve
-```
-
----
-
-## API Endpoints
-### **Auth Controller**
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/auth/login` | Login user & return JWT token |
-| `POST` | `/api/auth/register` | Register a new user |
-
-### **Movie Controller**
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/movies` | Get all movies |
-| `GET` | `/api/movies/{id}` | Get movie details |
-| `POST` | `/api/movies` | Add a new movie (Admin only) |
-| `DELETE` | `/api/movies/{id}` | Delete a movie (Admin only) |
-
-### **OMDb Controller**
-| Method | Endpoint                            | Description |
-|--------|-------------------------------------|-------------|
-| `GET` | `/api/omdb/search?title={title}`    | Search movies in OMDb API |
-| `GET` | `/api/omdb/details?imdbId={imdbId}` | Get movie details from OMDb |
-| `POST` | `/api/omdb/add`                     | Add a movie from OMDb to DB |
-
-### **Rating Controller**
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/ratings` | Rate a movie |
-| `GET` | `/api/ratings/{movieId}` | Get ratings for a movie |
-
----
-
-## Database Schema
-### **Tables**
-#### **User**
-| Column | Type |
-|---------|--------|
-| id | UUID |
-| username | String |
-| password | String |
-| role | ENUM (ADMIN, USER) |
-
-#### **Movie**
-| Column | Type |
-|---------|--------|
-| id | UUID |
-| title | String |
-| imdbId | String |
-| year | Integer |
-| genre | String |
-| posterUrl | String |
-
-#### **Rating**
-| Column | Type               |
-|---------|--------------------|
-| id | UUID               |
-| user_id | UUID (FK to User)  |
-| movie_id | UUID (FK to Movie) |
-| rating | Integer            |
-
----
-
-## Future Enhancements
-- User profiles with watchlists.
-- More advanced filtering & sorting.
-- Social features like comments & recommendations.
-
----
+## Deployment
+- Create a **Dockerfile** & **docker-compose.yml** for easy deployment.
+- Set up CI/CD with **GitHub Actions**.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under MIT License.
 
